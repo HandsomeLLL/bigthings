@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -29,8 +30,62 @@
             </form>
         </div>
 
-    </div> 
+    </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Tips</h4>
+                </div>
+                <div class="modal-body">
+                    用户或者密码为空哦
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
+
+<script src="./js/jquery-1.12.4.min.js"></script>
+<script src="./js/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        $('.input_sub').click(function (e) {
+            e.preventDefault()
+            var user_name = $('.input_txt').val().trim()
+            var password = $('.input_pass').val().trim()
+            if (user_name == "" || password == "") {
+                $('#myModal').modal()
+                return
+            }
+            $.ajax({
+                url: 'https://autumnfish.cn/big/admin/login',
+                type: 'post',
+                data: {
+                    user_name: user_name,
+                    password: password
+                },
+                success: function (backData) {
+                    console.log(backData);
+                    if (backData.code == 400) {
+                        $('.modal-body').text('用户名或者密码错了哦')
+                        $('#myModal').modal()
+                        // alert('用户名或者密码错了哦')
+                    } else if (backData.code == 200) {
+                        window.location.href = "./index.html"
+                    }
+                }
+            })
+        })
+    })
+</script>
